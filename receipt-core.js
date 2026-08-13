@@ -1,6 +1,6 @@
 export function parseReceiptItems(text){
   const result=[];
-  const skip=/^(итого|всего|сумма|наличн|безнал|скидка|ндс|кассир|чек|спасибо|к оплате|карта|сдача|налог|адрес|тел|инн|рн ккт)/i;
+  const skip=/^(итого|всего|сумма|наличн|безнал|скидка|ндс|кассир|чек|спасибо|к оплате|оплат|плат|карта|сдача|налог|адрес|тел|инн|рн ккт|№|док|авто|auto|терминал|картой)/i;
   const number=s=>Number(String(s).replace(/\s/g,'').replace(',', '.'));
   for(const raw of String(text||'').split(/\r?\n/)){
     let line=raw.trim().replace(/\s+/g,' ');
