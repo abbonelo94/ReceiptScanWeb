@@ -12,8 +12,8 @@ export function parseReceiptItems(text){
       if(qty>0&&total>0) result.push({name:cleanName(m[1]),qty,price:m[4]?round(total/qty):round(total),cat:'Другое'});
       continue;
     }
-    m=line.match(/^(.+?)\s+(\d+(?:[,.]\d+)?)\s*(?:₽|руб\.?|р\.?)$/i);
-    if(m){const price=number(m[2]);if(price>0&&hasLetters(m[1]))result.push({name:cleanName(m[1]),qty:1,price:round(price),cat:'Другое'});continue}
+    m=line.match(/^(.+?)\s+(\d+(?:[,.]\d+)?)\s*(?:₽|руб\.?|р\.?)?$/i);
+    if(m){const price=number(m[2]);if(price>0&&hasLetters(m[1])&&isItemName(m[1])&&!/^(итого|всего|сумма|док|номер|дата|время)/i.test(m[1]))result.push({name:cleanName(m[1]),qty:1,price:round(price),cat:'Другое'});continue}
     m=line.match(/^(.+?);\s*(\d+(?:[,.]\d+)?)\s*;\s*(\d+(?:[,.]\d+)?)(?:\s*;\s*(.+))?$/);
     if(m){const qty=number(m[2]),price=number(m[3]);if(qty>0&&price>0&&hasLetters(m[1])&&isItemName(m[1]))result.push({name:cleanName(m[1]),qty,price:round(price),cat:m[4]?.trim()||'Другое'});}
   }
