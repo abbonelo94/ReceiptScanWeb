@@ -15,10 +15,11 @@ export function parseReceiptItems(text){
     m=line.match(/^(.+?)\s+(\d+(?:[,.]\d+)?)\s*(?:₽|руб\.?|р\.?)$/i);
     if(m){const price=number(m[2]);if(price>0&&hasLetters(m[1]))result.push({name:cleanName(m[1]),qty:1,price:round(price),cat:'Другое'});continue}
     m=line.match(/^(.+?);\s*(\d+(?:[,.]\d+)?)\s*;\s*(\d+(?:[,.]\d+)?)(?:\s*;\s*(.+))?$/);
-    if(m){const qty=number(m[2]),price=number(m[3]);if(qty>0&&price>0&&hasLetters(m[1]))result.push({name:cleanName(m[1]),qty,price:round(price),cat:m[4]?.trim()||'Другое'});}
+    if(m){const qty=number(m[2]),price=number(m[3]);if(qty>0&&price>0&&hasLetters(m[1])&&isItemName(m[1]))result.push({name:cleanName(m[1]),qty,price:round(price),cat:m[4]?.trim()||'Другое'});}
   }
   return result.filter(x=>x.name.length>1);
 }
 function hasLetters(s){return /[А-Яа-яA-Za-z]/.test(s)}
+function isItemName(s){let x=String(s).trim();if(/[|¦°¢»«©®]/.test(x))return false;let letters=(x.match(/[А-Яа-яA-Za-z]/g)||[]).length;return letters>=3&&x.length<=80}
 function cleanName(s){return s.replace(/^\d+[.)\s-]+/,'').replace(/\s{2,}/g,' ').trim()}
 function round(n){return Math.round(n*100)/100}
